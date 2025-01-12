@@ -1,13 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
     private Rigidbody2D rb;
     private float inputH;
+    private Animator animator;
+
+    [Header("Movement System")]
+
+    [SerializeField] private Transform feet;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpForce;
-    private Animator animator;
+    [SerializeField] private float rayDistance;
+    [SerializeField] private LayerMask isJumpable;
+
+    [Header("Combat System")]
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private float radiusAttack;
+    [SerializeField] private int damageAttack;
+    [SerializeField] private LayerMask isDamageable;
 
     // Start is called before the first frame update
     void Start() {
@@ -19,7 +32,7 @@ public class Player : MonoBehaviour {
     void Update() {
         Movement();
         Jump();
-        Attack();
+        ReleaseAttack();
     }
 
     private void Movement() {
@@ -40,17 +53,37 @@ public class Player : MonoBehaviour {
         }
     }
     private void Jump() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Space) && Grounded()) {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             animator.SetTrigger("jump");
         }
     }
 
-    private void Attack() {
+    private bool Grounded() {
+        return Physics2D.Raycast(feet.position, Vector3.down, rayDistance, isJumpable);
+    }
+
+    private void ReleaseAttack() {
         if (Input.GetMouseButtonDown(0)) {
             animator.SetTrigger("attack");
         }
     }
 
+    // Se utiliza mediante evento de animación
+    private void Attack() {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(attackPoint.position, radiusAttack, isDamageable);
+        foreach(Collider2D collider in hitColliders) {
+            LivesSystem livesSystemPlayer = collider.GetComponent<LivesSystem>();
+            livesSystemPlayer.ReceiveDamage(damageAttack);
+        }
+    }
 
+    private void OnDrawGizmos() {
+        Gizmos.DrawSphere(attackPoint.position, radiusAttack);
+    }
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.CompareTag("FallZone")) {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
 }
