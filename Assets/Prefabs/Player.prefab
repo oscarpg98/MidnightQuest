@@ -194,6 +194,9 @@ MonoBehaviour:
   isDamageable:
     serializedVersion: 2
     m_Bits: 64
+  isInteractable:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &6054937693190724855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,6 +211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   isPlayer: 1
+  powerUps: []
 --- !u!212 &7659201849250768888
 SpriteRenderer:
   m_ObjectHideFlags: 0

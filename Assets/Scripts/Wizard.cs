@@ -10,8 +10,7 @@ public class Wizard : MonoBehaviour {
     private Animator anim;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         anim = GetComponent<Animator>();
         StartCoroutine(Attack());
     }
@@ -30,6 +29,16 @@ public class Wizard : MonoBehaviour {
     }
 
     private void LanzarBola() {
-            Instantiate(fireball, spawnPoint.position, transform.rotation);
+        Instantiate(fireball, spawnPoint.position, transform.rotation);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if (other.CompareTag("PlayerDetection")) {
+            Debug.Log("Player detectado");
+        }
+        else if (other.CompareTag("PlayerHitbox")) {
+            LivesSystem livesSystemPlayer = other.GetComponent<LivesSystem>();
+            livesSystemPlayer.ReceiveDamage(damageAttack);
+        }
     }
 }

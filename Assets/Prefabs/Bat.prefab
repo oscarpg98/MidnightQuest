@@ -55,8 +55,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  patrolSpeed: 5
+  patrolSpeed: 4
   damageAttack: 20
 --- !u!114 &3644621012953197757
 MonoBehaviour:
@@ -70,7 +69,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ddb6eae3c71834080dbeda7893b90b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 40
+  health: 20
+  isPlayer: 0
+  powerUps:
+  - {fileID: 2412381272274559302, guid: b0099fd4e27c0bd49b22d1afe0de096a, type: 3}
+  - {fileID: 823049825210374436, guid: f4b39b5816ee42a41b5ffaaa34a6c44e, type: 3}
 --- !u!212 &8829505601315320051
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -152,7 +155,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.007961392}

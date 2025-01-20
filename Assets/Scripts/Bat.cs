@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bat : MonoBehaviour
-{
+public class Bat : MonoBehaviour {
     [SerializeField] private Transform[] waypoints;
     [SerializeField] private float patrolSpeed;
     [SerializeField] private int damageAttack;
@@ -49,10 +48,10 @@ public class Bat : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("PlayerDetection")) {
-
+            Debug.Log("Player detectado");
         }
         else if (other.CompareTag("PlayerHitbox")) {
-            LivesSystem livesSystemPlayer = GetComponent<LivesSystem>();
+            LivesSystem livesSystemPlayer = other.GetComponent<LivesSystem>();
             livesSystemPlayer.ReceiveDamage(damageAttack);
         }
     }

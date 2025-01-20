@@ -9,15 +9,10 @@ public class Slime : MonoBehaviour {
     private Vector3 currentDestination;
     private int currentIndex;
 
-    // Start is called before the first frame update
+
     void Start() {
         currentDestination = waypoints[currentIndex].position;
         StartCoroutine(Patrol());
-    }
-
-    // Update is called once per frame
-    void Update() {
-        
     }
 
     IEnumerator Patrol() {

@@ -7,6 +7,10 @@ TagManager:
   - PlayerHitbox
   - PlayerDetection
   - FallZone
+  - Door
+  - Coin
+  - DoubleJump
+  - Medkit
   layers:
   - Default
   - TransparentFX
@@ -17,7 +21,7 @@ TagManager:
   - Hitbox
   - Detections
   - Ground
-  - 
+  - Interactable
   - 
   - 
   - 

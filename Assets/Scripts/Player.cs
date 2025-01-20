@@ -9,30 +9,32 @@ public class Player : MonoBehaviour {
     private Animator animator;
 
     [Header("Movement System")]
-
     [SerializeField] private Transform feet;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] private float rayDistance;
     [SerializeField] private LayerMask isJumpable;
 
+    private bool canDoubleJump = false;
+    private bool hasDoubleJumped = false;
+
     [Header("Combat System")]
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float radiusAttack;
     [SerializeField] private int damageAttack;
     [SerializeField] private LayerMask isDamageable;
+    [SerializeField] private LayerMask isInteractable;
 
-    // Start is called before the first frame update
     void Start() {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update() {
         Movement();
         Jump();
         ReleaseAttack();
+        Interact();
     }
 
     private void Movement() {
@@ -41,22 +43,30 @@ public class Player : MonoBehaviour {
 
         if (inputH != 0) {
             animator.SetBool("running", true);
-            if (inputH > 0) {
-                transform.eulerAngles = Vector3.zero;
-            }
-            else {
-                transform.eulerAngles = new Vector3 (0, 180, 0);
-            }
+            transform.eulerAngles = (inputH > 0) ? Vector3.zero : new Vector3(0, 180, 0);
         }
         else {
             animator.SetBool("running", false);
         }
     }
+
     private void Jump() {
-        if (Input.GetKeyDown(KeyCode.Space) && Grounded()) {
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            animator.SetTrigger("jump");
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            if (Grounded()) {
+                PerformJump();
+                hasDoubleJumped = false;
+            }
+            else if (canDoubleJump && !hasDoubleJumped) {
+                PerformJump();
+                hasDoubleJumped = true;
+            }
         }
+    }
+
+    private void PerformJump() {
+        rb.velocity = new Vector2(rb.velocity.x, 0);
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        animator.SetTrigger("jump");
     }
 
     private bool Grounded() {
@@ -69,21 +79,43 @@ public class Player : MonoBehaviour {
         }
     }
 
-    // Se utiliza mediante evento de animación
-    private void Attack() {
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(attackPoint.position, radiusAttack, isDamageable);
-        foreach(Collider2D collider in hitColliders) {
-            LivesSystem livesSystemPlayer = collider.GetComponent<LivesSystem>();
-            livesSystemPlayer.ReceiveDamage(damageAttack);
+    private void Interact() {
+        if (Input.GetKeyDown(KeyCode.E)) {
+            Collider2D detectedCollider = Physics2D.OverlapCircle(attackPoint.position, radiusAttack, isInteractable);
+            if (detectedCollider != null) {
+                if (detectedCollider.TryGetComponent(out IInteractable interactable)) {
+                    interactable.Interact();
+                }
+            }
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.CompareTag("DoubleJump")) {
+            StartCoroutine(ActivateDoubleJump());
+            Destroy(collision.gameObject);
+        }
+        else if (collision.CompareTag("FallZone")) {
+            GameManager.Instance.GameOver();
+        }
+    }
+
+    private IEnumerator ActivateDoubleJump() {
+        canDoubleJump = true;
+        yield return new WaitForSeconds(10);
+        canDoubleJump = false;
     }
 
     private void OnDrawGizmos() {
         Gizmos.DrawSphere(attackPoint.position, radiusAttack);
     }
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.CompareTag("FallZone")) {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+    // Se utiliza mediante evento de animación
+    private void Attack() {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(attackPoint.position, radiusAttack, isDamageable);
+        foreach (Collider2D collider in hitColliders) {
+            LivesSystem livesSystemPlayer = collider.GetComponent<LivesSystem>();
+            livesSystemPlayer.ReceiveDamage(damageAttack);
         }
     }
 }
