@@ -6,6 +6,7 @@ public class LivesSystem : MonoBehaviour {
     [SerializeField] private int health;
     [SerializeField] private bool isPlayer;
     [SerializeField] private GameObject[] powerUps;
+    [SerializeField] private int coinScore;
 
     public void ReceiveDamage(int damageReceived) {
         health -= damageReceived;
@@ -14,6 +15,7 @@ public class LivesSystem : MonoBehaviour {
         }
 
         if (health <= 0) {
+            GameManager.Instance.IncreasePlayerScore(coinScore);
             Destroy(gameObject);
         }
         if (health <= 0 && !isPlayer) {

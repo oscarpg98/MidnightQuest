@@ -8,10 +8,11 @@ public class Fireball : MonoBehaviour {
     [SerializeField] private float timeAlive;
     [SerializeField] private int damageAttack;
     private float timer;
+    private Vector2 direction;
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
-        rb.AddForce(transform.right * shootingImpulse, ForceMode2D.Impulse);
+        rb.AddForce(direction * transform.right * shootingImpulse, ForceMode2D.Impulse);
     }
 
     void Update() {
@@ -19,6 +20,10 @@ public class Fireball : MonoBehaviour {
         if (timer >= timeAlive) {
             Destroy(gameObject);
         }
+    }
+
+    public void SetDirection(Vector2 dir) {
+        direction = dir.normalized;
     }
 
     private void OnCollisionEnter2D(Collision2D other) {

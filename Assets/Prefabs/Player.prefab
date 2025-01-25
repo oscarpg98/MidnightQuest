@@ -181,6 +181,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a120ce6e225962d4794494861059bee2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpSound: {fileID: 8300000, guid: 30650d433ee35094b8fc4930f791aeb8, type: 3}
+  doubleJumpSound: {fileID: 8300000, guid: f022d2052bec72849b07aae9767c7cb2, type: 3}
+  attackSound: {fileID: 8300000, guid: 847f941ababa47c449d955900f8e10a8, type: 3}
+  hurtSound: {fileID: 8300000, guid: 6a8fb500597d62a4a9ff0df1e56617e9, type: 3}
   feet: {fileID: 6824493213036627395}
   movementSpeed: 12
   jumpForce: 30
@@ -211,7 +215,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   isPlayer: 1
-  powerUps: []
+  powerUps:
+  - {fileID: 2412381272274559302, guid: b0099fd4e27c0bd49b22d1afe0de096a, type: 3}
+  - {fileID: 823049825210374436, guid: f4b39b5816ee42a41b5ffaaa34a6c44e, type: 3}
+  coinScore: 0
 --- !u!212 &7659201849250768888
 SpriteRenderer:
   m_ObjectHideFlags: 0

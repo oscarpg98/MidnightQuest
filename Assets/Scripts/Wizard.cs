@@ -1,44 +1,72 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Wizard : MonoBehaviour {
-    [SerializeField] private GameObject fireball;
+public class Wizard : Enemy {
+    [SerializeField] private GameObject fireballPrefab;
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private float attackTime;
-    [SerializeField] private int damageAttack;
+    [SerializeField] private AudioClip fireballSound;
     private Animator anim;
+    private bool isAttacking = false;
+    private Transform playerTransform;
 
-    // Start is called before the first frame update
-    void Start() {
+    protected override void Start() {
         anim = GetComponent<Animator>();
-        StartCoroutine(Attack());
+        GameObject player = GameObject.FindGameObjectWithTag("PlayerHitbox");
+        if (player != null) {
+            playerTransform = player.transform;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    protected override void OnTriggerEnter2D(Collider2D other) {
+        base.OnTriggerEnter2D(other);
+
+        if (other.CompareTag("PlayerDetection")) {
+            Debug.Log("Jugador detectado por el Wizard.");
+            if (!isAttacking) {
+                isAttacking = true;
+                StartCoroutine(Attack());
+            }
+        }
     }
 
-    IEnumerator Attack() {
-        while (true) {
+    private void OnTriggerExit2D(Collider2D other) {
+        if (other.CompareTag("PlayerDetection")) {
+            Debug.Log("El jugador ha salido del área de detección.");
+            isAttacking = false;
+        }
+    }
+
+    protected override IEnumerator Attack() {
+        while (isAttacking) {
+            FacePlayer();
             anim.SetTrigger("atacar");
             yield return new WaitForSeconds(attackTime);
         }
     }
 
+    // Se llama mediante un evento de animación
     private void LanzarBola() {
-        Instantiate(fireball, spawnPoint.position, transform.rotation);
+        GameObject fireball = Instantiate(fireballPrefab, spawnPoint.position, Quaternion.identity);
+        Vector2 fireballDirection = transform.localScale.x > 0 ? Vector2.right : Vector2.left;
+        fireball.GetComponent<Fireball>().SetDirection(fireballDirection);
+        AudioManager.Instance.PlaySoundEffect(fireballSound);
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if (other.CompareTag("PlayerDetection")) {
-            Debug.Log("Player detectado");
+
+
+    private void FacePlayer() {
+        if (playerTransform == null) return;
+
+        if (playerTransform.position.x > transform.position.x) {
+            // Jugador a la derecha
+            transform.localScale = new Vector3(1, 1, 1);
+            spawnPoint.localPosition = new Vector3(Mathf.Abs(spawnPoint.localPosition.x), spawnPoint.localPosition.y, spawnPoint.localPosition.z);
         }
-        else if (other.CompareTag("PlayerHitbox")) {
-            LivesSystem livesSystemPlayer = other.GetComponent<LivesSystem>();
-            livesSystemPlayer.ReceiveDamage(damageAttack);
+        else {
+            // Jugador a la izquierda
+            transform.localScale = new Vector3(-1, 1, 1);
+            spawnPoint.localPosition = new Vector3(-Mathf.Abs(spawnPoint.localPosition.x), spawnPoint.localPosition.y, spawnPoint.localPosition.z);
         }
     }
 }

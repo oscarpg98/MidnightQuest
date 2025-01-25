@@ -55,8 +55,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  patrolSpeed: 4
+  patrolSpeed: 2
   damageAttack: 20
+  hurtSound: {fileID: 8300000, guid: 54aaa0b6ce15bc3449bd2c4a079b717f, type: 3}
 --- !u!114 &3644621012953197757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,6 +75,7 @@ MonoBehaviour:
   powerUps:
   - {fileID: 2412381272274559302, guid: b0099fd4e27c0bd49b22d1afe0de096a, type: 3}
   - {fileID: 823049825210374436, guid: f4b39b5816ee42a41b5ffaaa34a6c44e, type: 3}
+  coinScore: 5
 --- !u!212 &8829505601315320051
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -115,12 +117,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4795363162621231457, guid: 6d7cd4f7505dc674c891ca8946cfd98b, type: 3}
+  m_Sprite: {fileID: -1695668775, guid: a94a341214ec743498855c19e96084f3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3.75, y: 3.75}
+  m_Size: {x: 0.41, y: 0.31}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

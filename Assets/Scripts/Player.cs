@@ -8,6 +8,12 @@ public class Player : MonoBehaviour {
     private float inputH;
     private Animator animator;
 
+    [Header("Audio System")]
+    [SerializeField] AudioClip jumpSound;
+    [SerializeField] AudioClip doubleJumpSound;
+    [SerializeField] AudioClip attackSound;
+    [SerializeField] AudioClip hurtSound;
+
     [Header("Movement System")]
     [SerializeField] private Transform feet;
     [SerializeField] private float movementSpeed;
@@ -24,6 +30,8 @@ public class Player : MonoBehaviour {
     [SerializeField] private int damageAttack;
     [SerializeField] private LayerMask isDamageable;
     [SerializeField] private LayerMask isInteractable;
+
+    public AudioClip HurtSound { get => hurtSound; set => hurtSound = value; }
 
     void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -54,10 +62,12 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space)) {
             if (Grounded()) {
                 PerformJump();
+                AudioManager.Instance.PlaySoundEffect(jumpSound);
                 hasDoubleJumped = false;
             }
             else if (canDoubleJump && !hasDoubleJumped) {
                 PerformJump();
+                AudioManager.Instance.PlaySoundEffect(doubleJumpSound);
                 hasDoubleJumped = true;
             }
         }
@@ -74,7 +84,8 @@ public class Player : MonoBehaviour {
     }
 
     private void ReleaseAttack() {
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetKeyDown(KeyCode.Q) && Time.timeScale == 1) {
+            AudioManager.Instance.PlaySoundEffect(attackSound);
             animator.SetTrigger("attack");
         }
     }
@@ -116,6 +127,8 @@ public class Player : MonoBehaviour {
         foreach (Collider2D collider in hitColliders) {
             LivesSystem livesSystemPlayer = collider.GetComponent<LivesSystem>();
             livesSystemPlayer.ReceiveDamage(damageAttack);
+            AudioClip hurtSound = collider.GetComponent<Enemy>().HurtSound;
+            AudioManager.Instance.PlaySoundEffect(hurtSound);
         }
     }
 }

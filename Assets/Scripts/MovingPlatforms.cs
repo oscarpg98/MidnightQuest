@@ -33,7 +33,7 @@ public class MovingPlatforms : MonoBehaviour {
 
     private void OnCollisionExit2D(Collision2D collision) {
         // Elimina la relación del player con la plataforma móvil
-        if (collision.gameObject.CompareTag("PlayerHitbox")) {
+        if (collision.gameObject.CompareTag("PlayerHitbox") && collision.transform.parent != null) {
             collision.transform.SetParent(null);
         }
     }

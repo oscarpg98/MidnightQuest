@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3275977360289473995}
   - component: {fileID: 1097208805824625890}
-  - component: {fileID: 7103321653658884108}
   - component: {fileID: 7837645647323395110}
   m_Layer: 0
   m_Name: DoubleJump
@@ -86,18 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7103321653658884108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 823049825210374436}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb62513fd1a57ce48819de34179c5e38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &7837645647323395110
 BoxCollider2D:
   m_ObjectHideFlags: 0

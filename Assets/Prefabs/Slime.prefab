@@ -120,8 +120,9 @@ MonoBehaviour:
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
-  patrolSpeed: 2
+  patrolSpeed: 1
   damageAttack: 20
+  hurtSound: {fileID: 8300000, guid: a1c5301214b3d9845a49e3ffa1ca44d7, type: 3}
 --- !u!114 &2420637024062551294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,6 +140,7 @@ MonoBehaviour:
   powerUps:
   - {fileID: 2412381272274559302, guid: b0099fd4e27c0bd49b22d1afe0de096a, type: 3}
   - {fileID: 823049825210374436, guid: f4b39b5816ee42a41b5ffaaa34a6c44e, type: 3}
+  coinScore: 3
 --- !u!212 &7324340748686783016
 SpriteRenderer:
   m_ObjectHideFlags: 0
